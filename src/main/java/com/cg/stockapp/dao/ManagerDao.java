@@ -23,4 +23,17 @@ public class ManagerDao implements IManagerDao {
 		}
 	}
 
+	
+	public boolean deleteManager(Manager manager) {
+		if (repo.existsById(manager.getManagerId()))
+		{
+			repo.deleteById(manager.getManagerId())
+			return true;
+		}
+		else 
+		throw new DuplicateManagerException("Manager already exists with id " + manager.getManagerId());
+			
+		
+	}
+
 }
