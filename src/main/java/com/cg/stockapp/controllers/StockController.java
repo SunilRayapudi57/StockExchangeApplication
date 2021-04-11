@@ -32,4 +32,26 @@ public class StockController {
 		return "Stock added successfully";
 	}
 	
+	@PutMapping
+	public String updateStock(  @RequestBody Stock s) {
+		if(serv.updateStockDetails(s)) {
+			return "Stock Data successfully updated";
+		}
+		else
+		{
+			throw new StockNotFoundException("Update","stock with id "+s.getStockId()+"to update not found");
+		}
+	}
+	
+	@DeleteMapping("{stockid}")
+	public String removeStock(@PathVariable("stockid") int id) {
+		if(serv.removeStockDetails(id)) {
+			return "Stock Data successfully deleted";
+		}
+		else {
+			throw new StockNotFoundException("Delete","Stock with id "+id+"to delete not found");
+		}
+	}
+	
+	
 }
