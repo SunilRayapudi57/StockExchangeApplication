@@ -33,8 +33,8 @@ public class StockController {
 	}
 	
 	@PutMapping
-	public String updateStock(  @RequestBody Stock s) {
-		if(serv.updateStockDetails(s)) {
+	public String updateStock(@RequestBody Stock stock) {
+		if(serv.updateStockDetails(stock)) {
 			return "Stock Data successfully updated";
 		}
 		else
