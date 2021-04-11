@@ -3,19 +3,24 @@ package com.cg.stockapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cg.stockapp.dao.IAdminDao;
-import com.cg.stockapp.dto.Admin;
+import com.cg.stockapp.entities.Admin;
+import com.cg.stockapp.exceptions.DuplicateAdminException;
+import com.cg.stockapp.repository.AdminRepository;
 
 @Service
 public class AdminService implements IAdminService{
 
 	@Autowired
-	IAdminDao dao;
+	AdminRepository repo;
 	
 	@Override
 	public boolean addAdmin(Admin admin) {
-		dao.addAdmin(admin);
-		return true;
+		if(repo.existsById(admin.getAdminId()))
+			throw new DuplicateAdminException("Admin already exists with id "+admin.getAdminId());
+		else {
+			repo.save(admin);
+			return true;
+		}
 	}
 
 }

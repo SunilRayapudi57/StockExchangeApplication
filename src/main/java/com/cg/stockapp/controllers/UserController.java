@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.cg.stockapp.dto.User;
+import com.cg.stockapp.entities.User;
 import com.cg.stockapp.service.IUserService;
 
 public class UserController {

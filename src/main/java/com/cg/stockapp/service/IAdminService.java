@@ -1,6 +1,6 @@
 package com.cg.stockapp.service;
 
-import com.cg.stockapp.dto.Admin;
+import com.cg.stockapp.entities.Admin;
 
 public interface IAdminService {
 	

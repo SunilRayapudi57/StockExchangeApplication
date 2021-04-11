@@ -6,20 +6,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.stockapp.entities.Admin;
-import com.cg.stockapp.service.IAdminService;
+import com.cg.stockapp.entities.BankAccount;
+import com.cg.stockapp.service.BankAccountService;
 
 @RestController
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/bankAccount")
+public class BankAccountController {
 	
 	@Autowired
-	IAdminService serv;
+	BankAccountService serv;
 	
 	@PostMapping
-	public String addAdmin(@RequestBody Admin admin) {
-		serv.addAdmin(admin);
-		return "Admin added successfully";
+	public String addBankAccount(@RequestBody BankAccount acc) {
+		if(serv.addBankAccount(acc))
+			return "Bank Account not added";
+		else
+			return "Bank Account added successfully";
 	}
 	
 }

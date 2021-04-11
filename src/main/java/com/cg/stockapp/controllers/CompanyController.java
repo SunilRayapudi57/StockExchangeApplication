@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.stockapp.dto.Company;
+import com.cg.stockapp.entities.Company;
 import com.cg.stockapp.service.ICompanyService;
 
 @RestController

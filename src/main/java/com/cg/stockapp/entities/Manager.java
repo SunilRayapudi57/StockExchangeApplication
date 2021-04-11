@@ -1,33 +1,25 @@
-package com.cg.stockapp.dto;
+package com.cg.stockapp.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="manager")
 public class Manager {
+	
 	@Id
 	private int managerId;
 	private String managerName;
 	private String email;
 	private String password;
 	private String mobileNum;
-	@OneToOne
-	@JoinColumn(name="company_id")
-	private Company company ;
+
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "companyId")
+	private Company company;
 	
-	public Manager(int managerId, String managerName, String email, String password, String mobileNum, Company company) {
-		super();
-		this.managerId = managerId;
-		this.managerName = managerName;
-		this.email = email;
-		this.password = password;
-		this.mobileNum = mobileNum;
-		this.company = company;
-	}
 	public Manager() {
 		super();
 	}
@@ -47,7 +39,7 @@ public class Manager {
 	public String getEmail() {
 		return email;
 	}
-	public void setEmailId(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 	public String getPassword() {
@@ -69,10 +61,5 @@ public class Manager {
 		this.company = company;
 	}
 	
-	@Override
-	public String toString() {
-		return "Manager [managerId=" + managerId + ", managerName=" + managerName + ", emailId=" + email
-				+ ", mobileNum=" + mobileNum + ", company=" + company + "]";
-	}
 	
 }

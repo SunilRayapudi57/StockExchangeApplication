@@ -1,60 +1,49 @@
-package com.cg.stockapp.dto;
+package com.cg.stockapp.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="investor")
 public class Investor {
 	
 	@Id
-	private int investorId;
+	private String investorId;
 	private String investorName;
 	private String email;
 	private String password;
 	private String mobileNo;
 	private String gender;
+	private String status; // approved or notApproved	       
 	
-	@OneToOne
-	@JoinColumn(name="account_no")
+	@JsonIgnore
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="accountNo")
 	private BankAccount account;
 	
-	private String status; // approved or notApproved	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "investors", fetch = FetchType.LAZY)
+	private Set<Stock> stocks = new HashSet<>();
 	
-	@ManyToMany(mappedBy="investors")
-	private List<Stock> stocks = new ArrayList<>();
-	
-	public Investor(int investorId, String investorName, String email, String password, String mobileNo,
-			String gender, BankAccount account, String status) {
+	public Investor() {
 		super();
-		this.investorId = investorId;
-		this.investorName = investorName;
-		this.email = email; 
-		this.password = password; 
-		this.mobileNo = mobileNo; 
-		this.gender = gender; 
-		this.account = account;  
-		this.status = status; 
-	} 
-	public Investor() {}
+	}
 	
-	public List<Stock> getStocks() {
-		return stocks;
-	}
-	public void setStocks(List<Stock> stocks) {
-		this.stocks = stocks;
-	}
-	public int getInvestorId() {
+	public String getInvestorId() {
 		return investorId;
 	}
-	public void setInvestorId(int investorId) {
+	public void setInvestorId(String investorId) {
 		this.investorId = investorId;
 	}
 	public String getInvestorName() {
@@ -99,13 +88,11 @@ public class Investor {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	@Override
-	public String toString() {
-		return "InvestorId=" + investorId + ", InvestorName=" + investorName + ", Email=" + email
-				+ ", Password=" + password + ", MobileNo=" + mobileNo + ", Gender=" + gender + ", Account=" + account
-				+ ", Status=" + status;
+	public Set<Stock> getStocks() {
+		return stocks;
 	}
-	
-	
+	public void setStocks(Set<Stock> stocks) {
+		this.stocks = stocks;
+	}
 	
 }

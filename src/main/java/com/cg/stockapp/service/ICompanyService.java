@@ -1,6 +1,6 @@
 package com.cg.stockapp.service;
 
-import com.cg.stockapp.dto.Company;
+import com.cg.stockapp.entities.Company;
 
 public interface ICompanyService {
 	

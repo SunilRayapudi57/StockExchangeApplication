@@ -1,4 +1,4 @@
-package com.cg.stockapp.dto;
+package com.cg.stockapp.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

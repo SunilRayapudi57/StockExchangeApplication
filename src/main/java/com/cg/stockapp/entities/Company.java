@@ -1,7 +1,9 @@
 
-package com.cg.stockapp.dto;
+package com.cg.stockapp.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -14,17 +16,19 @@ public class Company {
     private String companyId;
     private String companyName;
     private String category;
-    @OneToOne(mappedBy="company")
+    
+    @OneToOne(mappedBy = "company", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Manager manager;
-    @OneToOne(mappedBy="companyId")
-    private Stock stock;
+    
 	public Company(String companyId, String companyName, String category) {
 		super();
 		this.companyId = companyId;
 		this.companyName = companyName;
 		this.category = category;
 	}
-	public Company() {}
+	public Company() {
+		super();
+	}
 	
 	public String getCompanyId() {
 		return companyId;

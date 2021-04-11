@@ -1,6 +1,6 @@
 package com.cg.stockapp.service;
 
-import com.cg.stockapp.dto.User;
+import com.cg.stockapp.entities.User;
 
 public interface IUserService {
 	

@@ -10,35 +10,26 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.cg.stockapp.exceptions.DuplicateAdminException;
 import com.cg.stockapp.exceptions.DuplicateCompanyException;
-import com.cg.stockapp.exceptions.DuplicateInvesterException;
 import com.cg.stockapp.exceptions.DuplicateManagerException;
+import com.cg.stockapp.exceptions.DuplicateStockException;
 import com.cg.stockapp.exceptions.DuplicateUserException;
+import com.cg.stockapp.exceptions.EmptyTableException;
 
 @ControllerAdvice
 public class ApplicationErrorHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(DuplicateInvesterException.class)
-	public ResponseEntity<?> handleDuplicateInvestor(DuplicateInvesterException die) {
+
+	@ExceptionHandler(DuplicateStockException.class)
+	public ResponseEntity<?> handleDuplicateManager(DuplicateStockException dse) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
 		errorbody.put("error", "creation failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", die.getMessage());
+		errorbody.put("details", dse.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
 	}
-
-	@ExceptionHandler(DuplicateAdminException.class)
-	public ResponseEntity<?> handleDuplicateAdmin(DuplicateAdminException dae) {
-		Map<String, Object> errorbody = new LinkedHashMap<>();
-		errorbody.put("error", "creation failed");
-		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", dae.getMessage());
-
-		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
-	}
-
+	
 	@ExceptionHandler(DuplicateManagerException.class)
 	public ResponseEntity<?> handleDuplicateManager(DuplicateManagerException dme) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
@@ -67,6 +58,16 @@ public class ApplicationErrorHandler extends ResponseEntityExceptionHandler {
 		errorbody.put("details", dce.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(EmptyTableException.class)
+	public ResponseEntity<?> handleEmptyDataException(EmptyTableException dte) {
+		Map<String, Object> errorbody = new LinkedHashMap<>();
+		errorbody.put("error", "Table is Empty");
+		errorbody.put("timestamp", LocalDateTime.now());
+		errorbody.put("details", dte.getMessage());
+
+		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
 	}
 	
 }

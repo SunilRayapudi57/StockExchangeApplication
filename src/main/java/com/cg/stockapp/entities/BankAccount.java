@@ -1,9 +1,11 @@
-package com.cg.stockapp.dto;
+package com.cg.stockapp.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="bankaccount")
@@ -14,17 +16,17 @@ public class BankAccount {
 	private String bankName;
 	private String branchName;
 	private String ifscCode;
+	
+	@JsonIgnore
 	@OneToOne(mappedBy="account")
 	private Investor investor;
-	public BankAccount(long accountNo, String bankName, String branchName, String ifscCode) {
-		super();
-		this.accountNo = accountNo;
-		this.bankName = bankName;
-		this.branchName = branchName;
-		this.ifscCode = ifscCode;
-	}
-	public BankAccount() {}
 	
+	public long getAccountNo() {
+		return accountNo;
+	}
+	public void setAccountNo(long accountNo) {
+		this.accountNo = accountNo;
+	}
 	public String getBankName() {
 		return bankName;
 	}
@@ -37,12 +39,6 @@ public class BankAccount {
 	public void setBranchName(String branchName) {
 		this.branchName = branchName;
 	}
-	public long getAccountNo() {
-		return accountNo;
-	}
-	public void setAccountNo(long accountNo) {
-		this.accountNo = accountNo;
-	}
 	public String getIfscCode() {
 		return ifscCode;
 	}
@@ -54,11 +50,8 @@ public class BankAccount {
 	}
 	public void setInvestor(Investor investor) {
 		this.investor = investor;
-	}
-	@Override
-	public String toString() {
-		return "AccountNo=" + accountNo + ", BankName=" + bankName + ", BranchName=" + branchName
-				+ ", IFSC="+ifscCode;
-	}
+	}	
+	
+	
 	
 }
