@@ -34,5 +34,24 @@ public class StockService implements IStockService {
 		else
 			return repo.findAll();
 	}
+	
+	@Override
+	public boolean updateStockDetails(Stock stock) {
+		if(repo.existsById(stock.getStockId())) {
+			repo.save(stock);
+		return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeStockDetails(int stid) {
+		if(repo.existsById(stid)) {
+			repo.deleteById(stid);
+		return true;
+		}
+			return false;
+	}
+
 
 }
