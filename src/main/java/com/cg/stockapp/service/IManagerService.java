@@ -1,9 +1,19 @@
 package com.cg.stockapp.service;
 
-import com.cg.stockapp.entities.Manager;
+import java.util.List;
 
-public interface IManagerService {
+import com.cg.stockapp.dto.Manager;
 
-	public boolean addManager(Manager manager);
+public interface ManagerService {
 	
+	public boolean addManager(Manager man);
+	
+	
+	public List<ManagerService> getAllManager(int ManagerId);
+	
+	
+	public Manager updateManager(Manager info);
+	public Manager deleteManager(Manager man);
+
+	//public int getManagerDetails(int ManagerId);
 }
