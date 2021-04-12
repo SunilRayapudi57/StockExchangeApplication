@@ -9,11 +9,19 @@ import com.cg.stockapp.exceptions.ManagerNotFoundException;
 import com.cg.stockapp.repository.ManagerRepository;
 
 @Service
-public class ManagerService implements IManagerService{
+public class ManagerService implements IManagerService {
 
-	
 	@Autowired
 	ManagerRepository repo;
+	
+	@Override
+	public Manager getManagerDetails(int managerId) {
+		if(repo.existsById(managerId)) {
+			return repo.findById(managerId).get();
+		}
+		else
+			throw new ManagerNotFoundException("Request", "Manager not found with id " + managerId);
+	}
 
 	@Override
 	public boolean addManager(Manager manager) {
@@ -25,12 +33,14 @@ public class ManagerService implements IManagerService{
 		}
 	}
 
-	public boolean deleteManager(Manager manager) {
-		if (repo.existsById(manager.getManagerId())) {
-			repo.deleteById(manager.getManagerId());
+	@Override
+	public boolean deleteManager(int managerId) {
+		if (repo.existsById(managerId)) {
+			repo.deleteById(managerId);
 			return true;
 		} else
-			throw new ManagerNotFoundException("Manager not found with id " + manager.getManagerId());
-
+			throw new ManagerNotFoundException("Delete", "Manager not found with id " + managerId);
 	}
+	
+	
 }

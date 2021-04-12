@@ -16,6 +16,7 @@ public class BankAccount {
 	private String bankName;
 	private String branchName;
 	private String ifscCode;
+	private String investorId;
 	
 	@JsonIgnore
 	@OneToOne(mappedBy="account")
@@ -45,13 +46,11 @@ public class BankAccount {
 	public void setIfscCode(String ifscCode) {
 		this.ifscCode = ifscCode;
 	}
-	public Investor getInvestor() {
-		return investor;
+	public String getInvestorId() {
+		return investorId;
 	}
-	public void setInvestor(Investor investor) {
-		this.investor = investor;
-	}	
-	
-	
+	public void setInvestorId(String investorId) {
+		this.investorId = investorId;
+	}
 	
 }

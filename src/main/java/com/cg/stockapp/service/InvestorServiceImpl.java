@@ -12,7 +12,7 @@ import com.cg.stockapp.exceptions.InvestorNotFoundException;
 import com.cg.stockapp.repository.InvestorRepository;
 
 @Service
-public class InvestorServiceImpl implements InvestorSerive{
+public class InvestorServiceImpl implements InvestorService{
 
 	@Autowired
 	InvestorRepository repo;
@@ -37,12 +37,32 @@ public class InvestorServiceImpl implements InvestorSerive{
 	}
 
 	@Override
-	public boolean deleteInvestor(Investor inv) {
-		if (repo.existsById(inv.getInvestorId())) {
-			repo.delete(inv);
+	public boolean deleteInvestor(String investorId) {
+		if (repo.existsById(investorId)) {
+			repo.deleteById(investorId);
 			return true;
 		} else
-			throw new InvestorNotFoundException("Investor not found with id " + inv.getInvestorId());
+			throw new InvestorNotFoundException("Delete", "Investor not found with id " + investorId);
+	}
+
+	@Override
+	public Investor getInvestorDetails(String investorId) {
+		Investor investor = repo.findById(investorId).get();
+		if(investor == null)
+			throw new  InvestorNotFoundException("Request", "Investor not found with id "+investorId);
+		else
+			return investor;
+	}
+
+	@Override
+	public boolean updateInvestor(Investor info) {
+		if(repo.existsById(info.getInvestorId())) {
+			repo.save(info);
+			return true;
+		}
+		else
+			throw new InvestorNotFoundException("Update", "Investor not found with id "+info.getInvestorId());
+
 	}
 
 }

@@ -27,8 +27,7 @@ public class Investor {
 	private String gender;
 	private String status; // approved or notApproved	       
 	
-	@JsonIgnore
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="accountNo")
 	private BankAccount account;
 	

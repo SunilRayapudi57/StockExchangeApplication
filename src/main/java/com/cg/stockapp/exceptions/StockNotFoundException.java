@@ -1,10 +1,9 @@
 package com.cg.stockapp.exceptions;
 
-public class InvestorNotFoundException extends RuntimeException {
+public class StockNotFoundException extends RuntimeException {
 	
 	private String operation;
-	
-	public InvestorNotFoundException(String operation, String message) {
+	public StockNotFoundException(String operation, String message) {
 		super(message);
 		this.operation = operation;
 	}
@@ -12,4 +11,6 @@ public class InvestorNotFoundException extends RuntimeException {
 	public String getOperation() {
 		return this.operation;
 	}
+	
 }
+ 

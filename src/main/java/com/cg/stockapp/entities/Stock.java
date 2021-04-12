@@ -12,8 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Stock  {
 	
 	@Id
-    private int stockId;
-	private String companyId;
+    private String stockId;
 	private String stockName;
 	private int quantity;
 	private String type;
@@ -21,6 +20,10 @@ public class Stock  {
 	private int stockTotal;
 	private double profitLoss;
 	private String status; // active or non-Active
+	
+	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "compan_id")
+	private Company company;
 	
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -35,17 +38,11 @@ public class Stock  {
 		super();
 	}
 	
-	public int getStockId() {
+	public String getStockId() {
 		return stockId;
 	}
-	public void setStockId(int stockId) {
+	public void setStockId(String stockId) {
 		this.stockId = stockId;
-	}
-	public String getCompanyId() {
-		return companyId;
-	}
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
 	}
 	public String getStockName() {
 		return stockName;

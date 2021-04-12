@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.cg.stockapp.exceptions.DuplicateInvesterException;
-import com.cg.stockapp.exceptions.InvestorNotFoundException;
+import com.cg.stockapp.exceptions.DuplicateStockException;
+import com.cg.stockapp.exceptions.StockNotFoundException;
 
 @ControllerAdvice
-public class InvestorErrorHandler extends ResponseEntityExceptionHandler{
+public class StockErrorHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(DuplicateInvesterException.class)
-	public ResponseEntity<?> handleDuplicateInvestor(DuplicateInvesterException die) {
+	@ExceptionHandler(DuplicateStockException.class)
+	public ResponseEntity<?> handleDuplicateStock(DuplicateStockException dse) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
 		errorbody.put("error", "creation failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", die.getMessage());
+		errorbody.put("details", dse.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
 	}
 	
-	@ExceptionHandler(InvestorNotFoundException.class)
-	public ResponseEntity<?> handleMissingInvestor(InvestorNotFoundException ine) {
+	@ExceptionHandler(StockNotFoundException.class)
+	public ResponseEntity<?> handleMissingStock(StockNotFoundException sne) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
-		errorbody.put("error", ine.getOperation()+" failed");
+		errorbody.put("error", sne.getOperation()+" failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", ine.getMessage());
+		errorbody.put("details", sne.getMessage());
 
-		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
 	}
-	
+
 }

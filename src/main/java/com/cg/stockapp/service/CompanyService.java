@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.stockapp.entities.Company;
+import com.cg.stockapp.exceptions.CompanyNotFoundException;
 import com.cg.stockapp.exceptions.DuplicateCompanyException;
 import com.cg.stockapp.repository.CompanyRepository;
 
@@ -22,6 +23,24 @@ public class CompanyService implements ICompanyService{
 			repo.save(company);
 			return true;
 		}
+	}
+
+	@Override
+	public Company getCompanyDetails(String companyId) {
+		if(repo.existsById(companyId))
+			return repo.findById(companyId).get();
+		else
+			throw new CompanyNotFoundException("Request", "Company not found with id "+companyId);
+	}
+
+	@Override
+	public boolean deleteCompany(String companyId) {
+		if(repo.existsById(companyId)) {
+			repo.deleteById(companyId);
+			return true;
+		}
+		else
+			throw new CompanyNotFoundException("Delete", "Company not found with id "+companyId);
 	}
 
 }

@@ -10,28 +10,28 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.cg.stockapp.exceptions.DuplicateInvesterException;
-import com.cg.stockapp.exceptions.InvestorNotFoundException;
+import com.cg.stockapp.exceptions.DuplicateUserException;
+import com.cg.stockapp.exceptions.UserNotFoundException;
 
 @ControllerAdvice
-public class InvestorErrorHandler extends ResponseEntityExceptionHandler{
+public class UserErrorHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(DuplicateInvesterException.class)
-	public ResponseEntity<?> handleDuplicateInvestor(DuplicateInvesterException die) {
+	@ExceptionHandler(DuplicateUserException.class)
+	public ResponseEntity<?> handleDuplicateUser(DuplicateUserException due) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
 		errorbody.put("error", "creation failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", die.getMessage());
+		errorbody.put("details", due.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
 	}
 	
-	@ExceptionHandler(InvestorNotFoundException.class)
-	public ResponseEntity<?> handleMissingInvestor(InvestorNotFoundException ine) {
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<?> handleMissingUser(UserNotFoundException une) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
-		errorbody.put("error", ine.getOperation()+" failed");
+		errorbody.put("error", une.getOperation()+" failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", ine.getMessage());
+		errorbody.put("details", une.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
 	}

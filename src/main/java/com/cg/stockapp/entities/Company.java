@@ -1,12 +1,12 @@
 
 package com.cg.stockapp.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "company")
@@ -16,9 +16,6 @@ public class Company {
     private String companyId;
     private String companyName;
     private String category;
-    
-    @OneToOne(mappedBy = "company", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Manager manager;
     
 	public Company(String companyId, String companyName, String category) {
 		super();

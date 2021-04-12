@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cg.stockapp.entities.Stock;
 import com.cg.stockapp.exceptions.DuplicateStockException;
 import com.cg.stockapp.exceptions.EmptyTableException;
+import com.cg.stockapp.exceptions.StockNotFoundException;
 import com.cg.stockapp.repository.StockRepository;
 
 @Service
@@ -34,24 +35,25 @@ public class StockService implements IStockService {
 		else
 			return repo.findAll();
 	}
-	
+
 	@Override
 	public boolean updateStockDetails(Stock stock) {
-		if(repo.existsById(stock.getStockId())) {
+		if (repo.existsById(stock.getStockId())) {
 			repo.save(stock);
-		return true;
+			return true;
 		}
-		return false;
+		else
+			throw new StockNotFoundException("Update", "Stock not found with id "+stock.getStockId());
 	}
 
 	@Override
-	public boolean removeStockDetails(int stid) {
-		if(repo.existsById(stid)) {
-			repo.deleteById(stid);
-		return true;
+	public boolean removeStockDetails(String stockId) {
+		if (repo.existsById(stockId)) {
+			repo.deleteById(stockId);
+			return true;
 		}
-			return false;
+		else
+			throw new StockNotFoundException("Delete", "Stock not found with id "+stockId);
 	}
-
 
 }
