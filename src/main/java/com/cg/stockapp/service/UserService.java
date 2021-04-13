@@ -22,12 +22,12 @@ public class UserService implements IUserService{
 	public boolean addUser(User user) {
 		log.info("addUser() invoked");
 		if(repo.existsById(user.getUserId())) {
-			log.warn("Creation Failed, User already exists with id "+user.getUserId());
+			log.warn("DuplicateUserException thrown...Creation Failed, User already exists with id "+user.getUserId());
 			throw new DuplicateUserException("User already exists with id "+user.getUserId());
 		} 
 		else {
 			repo.save(user);
-			log.info("A new user added");
+			log.info("A new user has been added");
 			return true;
 		}
 	}
@@ -41,7 +41,7 @@ public class UserService implements IUserService{
 			return true;
 		}
 		else {
-			log.warn("Delete Failed, User not found with id "+userId);
+			log.warn("UserNotFoundException thrown...Delete Failed, User not found with id "+userId);
 			throw new UserNotFoundException("Delete","User not found with id "+userId);
 		}
 	}
@@ -55,7 +55,7 @@ public class UserService implements IUserService{
 			return true;
 		}
 		else {
-			log.warn("Delete Failed, User not found with id "+user.getUserName());
+			log.warn("UserNotFoundException thrown...Delete Failed, User not found with id "+user.getUserName());
 			throw new UserNotFoundException("Update","User not found with id "+user.getUserId());
 		}
 	}
@@ -65,11 +65,11 @@ public class UserService implements IUserService{
 		log.info("login() invoked");
 		User user = repo.findByUserNameAndPassword(username, password);
 		if(user == null) {
-			log.error("Login Failed, username or password is incorrect");
+			log.error("UserNotFoundException thrown...Login Failed, username or password is incorrect");
 			throw new UserNotFoundException("Login","username or password is incorrect");
 		}
 		else {
-			log.info("Login success for user with id "+user.getUserId());
+			log.info("User "+username+" has logged in successfully ");
 			return user;
 		}
 	}
@@ -77,8 +77,8 @@ public class UserService implements IUserService{
 	@Override
 	public String logout(User user) {
 		log.info("logout() invoked");
-		log.info("User with id "+user.getUserId()+" has logged out");
-		return "User "+user.getUserName()+" has logged out";
+		log.info("User "+user.getUserName()+" has been logged out");
+		return "User "+user.getUserName()+" has been logged out";
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.cg.stockapp.exceptions;
 
-public class CompanyNotFoundException extends RuntimeException {
+public class AdminNotFoundException extends RuntimeException {
 	
 	private String operation;
-	public CompanyNotFoundException(String operation, String message) {
+	public AdminNotFoundException(String operation, String message) {
 		super(message);
 		this.operation = operation;
 	}
@@ -11,4 +11,5 @@ public class CompanyNotFoundException extends RuntimeException {
 	public String getOperation() {
 		return this.operation;
 	}
+
 }

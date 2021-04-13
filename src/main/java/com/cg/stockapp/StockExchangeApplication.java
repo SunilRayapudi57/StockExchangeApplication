@@ -32,7 +32,7 @@ public class StockExchangeApplication {
 	
 	@SuppressWarnings("deprecation")
 	private ApiInfo metaInfo()
-	{
+	{ 
 		return new ApiInfo(
 							  "Stock Exchange Application", 
 							  "Sprint 1",

@@ -1,5 +1,6 @@
 package com.cg.stockapp.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -10,24 +11,39 @@ import javax.persistence.OneToOne;
 public class Manager {
 	
 	@Id
-	private int managerId;
+	@Column(name = "MANAGER_ID", nullable = false)
+	private String managerId;
+	
+	@Column(name = "MANAGER_NAME")
 	private String managerName;
+	@Column(name = "EMAIL")
 	private String email;
+	@Column(name = "PASSWORD")
 	private String password;
+	@Column(name = "MOBILE_NUM" )
 	private String mobileNum;
 
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyId")
 	private Company company;
 	
+	public Manager(String managerId, String managerName, String email, String password, String mobileNum) {
+		super();
+		this.managerId = managerId;
+		this.managerName = managerName;
+		this.email = email;
+		this.password = password;
+		this.mobileNum = mobileNum;
+	}
+
 	public Manager() {
 		super();
 	}
 	
-	public int getManagerId() {
+	public String getManagerId() {
 		return managerId;
 	}
-	public void setManagerId(int managerId) {
+	public void setManagerId(String managerId) {
 		this.managerId = managerId;
 	}
 	public String getManagerName() {

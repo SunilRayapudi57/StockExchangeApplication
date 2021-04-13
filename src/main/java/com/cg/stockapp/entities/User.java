@@ -20,20 +20,20 @@ public class User {
 	@Column(name = "USER_ID", updatable = false, nullable = false )
 	private Long userId;
 	
-	@NotNull
-	@Size(min = 5, max = 20, message = "Name should be 5 to 20 characters")
-	@Pattern(regexp = "^[A-Za-z]+[A-Za-z_0-9]*$", message = "Username should not contain any special characters")
+//	@NotNull
+//	@Size(min = 5, max = 20, message = "Name should be 5 to 20 characters")
+//	@Pattern(regexp = "^[A-Za-z]+[A-Za-z_0-9]*$", message = "Username should not contain any special characters")
 	@Column(name = "USER_NAME")
 	private String userName;
 	
-	@NotNull
-	@Pattern(regexp = "^[A-Za-z]+[0-9[#@*]]+$", message = "Password should atleast conatain a digit and a special character")
-	@Size(min = 5, max = 20, message = "Password should be 5 to 20 characters")
+//	@NotNull
+//	@Pattern(regexp = "[A-Za-z]+[0-9]+[!@#$%^&*]+", message = "Password should atleast contain a digit and a special character")
+//	@Size(min = 5, max = 20, message = "Password should be 5 to 20 characters")
 	@Column(name = "PASSWORD")
 	private String password;
 	
-	@NotNull
-	@Pattern(regexp = "(?:admin|investor|manager)", message = "Role must be admin or investor or manager")
+//	@NotNull
+//	@Pattern(regexp = "(Admin|Investor|Manager)", message = "Role must be admin or investor or manager")
 	@Column(name = "ROLE")
 	private String role;// admin or investor or manager
 

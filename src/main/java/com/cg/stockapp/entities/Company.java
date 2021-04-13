@@ -1,20 +1,27 @@
 
 package com.cg.stockapp.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "company")
 public class Company {
     
     @Id
+    @Column(name = "COMPANY_ID", nullable = false)
     private String companyId;
+    
+    @Column(name = "COMPANY_NAME")
+    @Size(min = 4, max = 25)
     private String companyName;
+    
+    @Column(name = "CATEGORY")
+//    @Size(min = 3, max = 7, message = "Invalid category")
     private String category;
     
 	public Company(String companyId, String companyName, String category) {

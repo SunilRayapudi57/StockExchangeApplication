@@ -10,30 +10,29 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.cg.stockapp.exceptions.DuplicateUserException;
-import com.cg.stockapp.exceptions.UserNotFoundException;
+import com.cg.stockapp.exceptions.CompanyNotFoundException;
+import com.cg.stockapp.exceptions.DuplicateCompanyException;
 
 @ControllerAdvice
-public class UserErrorHandler extends ResponseEntityExceptionHandler{
+public class CompanyErrorHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(DuplicateUserException.class)
-	public ResponseEntity<?> handleDuplicateUser(DuplicateUserException due) {
+	@ExceptionHandler(DuplicateCompanyException.class)
+	public ResponseEntity<?> handleDuplicateCompanyException(DuplicateCompanyException dce) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
 		errorbody.put("error", "Creation failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", due.getMessage());
+		errorbody.put("details", dce.getMessage());
 
-		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
+		return new ResponseEntity<>(errorbody, HttpStatus.ALREADY_REPORTED);
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<?> handleMissingUser(UserNotFoundException une) {
+	@ExceptionHandler(CompanyNotFoundException.class)
+	public ResponseEntity<?> handleMissingCompanyException(CompanyNotFoundException cne) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
-		errorbody.put("error", une.getOperation()+" failed");
+		errorbody.put("error", cne.getOperation()+" failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", une.getMessage());
+		errorbody.put("details", cne.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
 	}
-	
 }

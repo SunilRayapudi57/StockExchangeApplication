@@ -6,30 +6,32 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.cg.stockapp.exceptions.DuplicateManagerException;
-import com.cg.stockapp.exceptions.ManagerNotFoundException;
+import com.cg.stockapp.exceptions.AdminNotFoundException;
+import com.cg.stockapp.exceptions.DuplicateAdminException;
 
-public class ManagerErrorHandler extends ResponseEntityExceptionHandler{
+@ControllerAdvice
+public class AdminErrorHandler extends ResponseEntityExceptionHandler{
 	
-	@ExceptionHandler(DuplicateManagerException.class)
-	public ResponseEntity<?> handleDuplicateManager(DuplicateManagerException dme) {
+	@ExceptionHandler(DuplicateAdminException.class)
+	public ResponseEntity<?> handleDuplicateAdmin(DuplicateAdminException dae) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
 		errorbody.put("error", "Creation failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", dme.getMessage());
+		errorbody.put("details", dae.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
 	}
 	
-	@ExceptionHandler(ManagerNotFoundException.class)
-	public ResponseEntity<?> handleMissingManager(ManagerNotFoundException mne) {
+	@ExceptionHandler(AdminNotFoundException.class)
+	public ResponseEntity<?> handleMissingAdmin(AdminNotFoundException ane) {
 		Map<String, Object> errorbody = new LinkedHashMap<>();
-		errorbody.put("error", mne.getOperation()+" failed");
+		errorbody.put("error", ane.getOperation()+" failed");
 		errorbody.put("timestamp", LocalDateTime.now());
-		errorbody.put("details", mne.getMessage());
+		errorbody.put("details", ane.getMessage());
 
 		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
 	}
