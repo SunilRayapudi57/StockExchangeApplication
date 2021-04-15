@@ -18,6 +18,7 @@ public class AdminService implements IAdminService{
 	
 	Logger log = LoggerFactory.getLogger(AdminService.class);
 	
+	//Adding the admin
 	@Override
 	public boolean addAdmin(Admin admin) {
 		log.info("addAdmin() has been invoked");
@@ -32,6 +33,7 @@ public class AdminService implements IAdminService{
 		}
 	}
 
+	//Updating the admin
 	@Override
 	public boolean updateAdmin(Admin admin) {
 		log.info("updateAdmin() has been invoked");
@@ -46,6 +48,7 @@ public class AdminService implements IAdminService{
 			
 	}
 
+	//Display the admin
 	@Override
 	public Admin viewAdmin(String adminId) {
 		log.info("viewAdmin() has been invoked");
@@ -59,6 +62,7 @@ public class AdminService implements IAdminService{
 		}
 	}
 
+	//Remove the admin
 	@Override
 	public boolean removeAdmin(String adminId) {
 		if(repo.existsById(adminId)) {

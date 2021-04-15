@@ -3,6 +3,7 @@ package com.cg.stockapp.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,13 +29,17 @@ public class AdminController {
 	}
 	
 	@PutMapping
-	public String updateAdmin(@RequestBody Admin admin) {
+	public String updateAdmin(@Valid @RequestBody Admin admin, BindingResult result) {
+		if(result.hasErrors())
+			return "Validation failed "+result.getFieldErrors().get(0);
 		serv.updateAdmin(admin);
 		return "Admin with id "+admin.getAdminId()+" updated successfully";
 	}
 	
 	@PostMapping
-	public String addAdmin(@RequestBody Admin admin) {
+	public String addAdmin(@Valid @RequestBody Admin admin,BindingResult result) {
+		if(result.hasErrors())
+			return "Validation failed "+result.getFieldErrors().get(0);
 		serv.addAdmin(admin);
 		return "Admin added successfully";
 	}

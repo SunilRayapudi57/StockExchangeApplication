@@ -21,6 +21,7 @@ public class CompanyService implements ICompanyService {
 
 	Logger log = LoggerFactory.getLogger(CompanyService.class);
 
+	//Adding the Company
 	@Override
 	public boolean addCompany(Company company) {
 
@@ -35,6 +36,7 @@ public class CompanyService implements ICompanyService {
 		}
 	}
 
+	//Display the company info
 	@Override
 	public Company getCompanyInfo(String companyId) {
 		log.info("getCompanyInfo() has been invoked");
@@ -47,6 +49,7 @@ public class CompanyService implements ICompanyService {
 		}
 	}
 
+	//Display all the companies info
 	@Override
 	public List<Company> getAllCompanyInfo() {
 		List<Company> companyList = repo.findAll();
@@ -60,6 +63,7 @@ public class CompanyService implements ICompanyService {
 		}
 	}
 	
+	//Update the Company
 	@Override
 	public boolean updateCompany(Company company) {
 		log.info("updateCompany() has been invoked");
@@ -73,6 +77,7 @@ public class CompanyService implements ICompanyService {
 		}
 	}
 	
+	//Delete the company
 	@Override
 	public boolean deleteCompany(String companyId) {
 		log.info("deleteCompany() has been invoked");

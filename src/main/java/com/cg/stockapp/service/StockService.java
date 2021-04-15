@@ -27,6 +27,7 @@ public class StockService implements IStockService {
 	
 	Logger log = LoggerFactory.getLogger(StockService.class);
 
+	//Add the Stock
 	@Override
 	public boolean addStock(Stock stock) {
 		log.info("addStock() has been invoked");
@@ -46,6 +47,7 @@ public class StockService implements IStockService {
 		}
 	}
 
+	//Display all the Stocks
 	@Override
 	public List<Stock> viewAllStock() {
 		log.info("viewAllStock() has been invoked");
@@ -59,6 +61,7 @@ public class StockService implements IStockService {
 		}
 	}
 
+	//Update Stock details
 	@Override
 	public boolean updateStockDetails(Stock stock) {
 		log.info("updateStock() has been invoked");
@@ -78,6 +81,7 @@ public class StockService implements IStockService {
 		}
 	}
 
+	//Remove the Stock
 	@Override
 	public boolean removeStockDetails(String stockId) {
 		log.info("removeStock() has been invoked");
@@ -92,6 +96,7 @@ public class StockService implements IStockService {
 		}
 	}
 
+	//Display the Stock details
 	@Override
 	public Stock viewStockDetails(String stockId) {
 		log.info("viewStockDetails() has been invoked");
@@ -105,6 +110,7 @@ public class StockService implements IStockService {
 		}
 	}
 
+	//Display the Stock by Company
 	@Override
 	public List<Stock> viewStockByCompany(String companyName) {
 		
@@ -116,10 +122,6 @@ public class StockService implements IStockService {
 		
 		Company company = companyRepo.findByCompanyName(companyName);
 		List<Stock> stockList = repo.findByCompany(company);
-		
-//		List<Stock> stockList = repo.findAll().stream()
-//											  .filter(stock->stock.getCompany().getCompanyName().equals(companyName))
-//											  .collect(Collectors.toList());
 		
 		if(stockList.isEmpty()) {
 			log.warn("StockNotFoundException : Rquest failed, no stock found for the company "+companyName);

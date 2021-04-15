@@ -4,79 +4,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="stock")
 public class Stock  {
 	
 	@Id
-	@Column(name = "STOCK_ID")
+	@Column(name = "STOCK_ID", nullable = false)
     private String stockId;
 	
+	@NotNull
 	@Column(name = "STOCK_NAME")
 	private String stockName;
 	
+	@NotNull
 	@Column(name = "QUANTITY")
 	private int quantity;
 	
+	@NotNull
+	@Pattern(regexp = "(NSE|BSE)")
 	@Column(name = "TYPE")
 	private String type;
 	
-	@Column(name = "AVG_PRICE")
-	private double avgPrice;
+	@NotNull
+	@Column(name = "STOCK_PRICE")
+	private double stockPrice;
 	
+	@Transient
 	@Column(name = "STOCK_TOTAL")
-	private int stockTotal;
+	private double stockTotal;
 	
 	@Column(name = "PROFIT_LOSS")
 	private double profitLoss;
 	
+	@JsonIgnore
 	@Column(name = "STATUS")
-	private String status; // active or non-Active
+	private String status = "active"; // active or non-Active
 	
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "company_id")
 	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 	private Company company;
 	
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-			name = "Stocks_Investors",
-			joinColumns = @JoinColumn(name = "stock_Id"),
-			inverseJoinColumns = @JoinColumn(name = "investor_id")
-		)
-	private List<Investor> investors = new ArrayList<>();
+	@OneToMany(targetEntity = Transaction.class, mappedBy = "stock")
+	private List<Transaction> transactions = new ArrayList<>();
 	
 	
-	public Stock(String stockId, String stockName, int quantity, String type, double avgPrice, int stockTotal,
-			double profitLoss, String status) {
+	public Stock(String stockId, String stockName, int quantity, String type, double stockPrice, Company company) {
 		super();
 		this.stockId = stockId;
 		this.stockName = stockName;
 		this.quantity = quantity;
 		this.type = type;
-		this.avgPrice = avgPrice;
-		this.stockTotal = stockTotal;
-		this.profitLoss = profitLoss;
-		this.status = status;
+		this.stockPrice = stockPrice;
+		this.company = company;
+		this.stockTotal = this.quantity*this.stockPrice;
+		
 	}
-
 	public Stock() {
 		super();
 	}
 	
-	public void addInvestor(Investor investor) {
-		this.investors.add(investor);
-	}
-	public void removeInvestor(Investor investor) {
-		this.investors.remove(investor);
+	public void addTransaction(Transaction transaction) {
+		this.transactions.add(transaction);
 	}
 	
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
 	public Company getCompany() {
 		return company;
 	}
@@ -107,16 +113,10 @@ public class Stock  {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public double getAvgPrice() {
-		return avgPrice;
-	}
-	public void setAvgPrice(double avgPrice) {
-		this.avgPrice = avgPrice;
-	}
-	public int getStockTotal() {
+	public double getStockTotal() {
 		return stockTotal;
 	}
-	public void setStockTotal(int stockTotal) {
+	public void setStockTotal(double stockTotal) {
 		this.stockTotal = stockTotal;
 	}
 	public double getProfitLoss() {
@@ -130,13 +130,6 @@ public class Stock  {
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public List<Investor> getInvestors() {
-		return investors;
-	}
-	public void setInvestors(List<Investor> investors) {
-		this.investors = investors;
 	}
 	
 	

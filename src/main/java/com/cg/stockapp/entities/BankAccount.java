@@ -5,19 +5,30 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="bankaccount")
 public class BankAccount {
 	
 	@Id
-	@Column(name = "ACCOUNT_NO")
+	@Column(name = "ACCOUNT_NO", nullable = false, updatable = false)
 	private long accountNo;
+	
+	@NotNull
 	@Column(name = "BANK_NAME")
 	private String bankName;
+	
+	@NotNull
+	@Column(name = "BRANCH_NAME" )
 	private String branchName;
+	
+	@NotNull
+	@Pattern(regexp = "^[A-Z]+[0-9]+")
+	@Column(name = "IFSC_CODE")
 	private String ifscCode;
 	
 	@JsonIgnore

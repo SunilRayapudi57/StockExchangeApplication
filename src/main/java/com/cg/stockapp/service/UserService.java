@@ -18,6 +18,7 @@ public class UserService implements IUserService{
 	
 	Logger log = LoggerFactory.getLogger(UserService.class);
 	
+	//Add the User
 	@Override
 	public boolean addUser(User user) {
 		log.info("addUser() invoked");
@@ -32,6 +33,7 @@ public class UserService implements IUserService{
 		}
 	}
 
+	//Remove the User
 	@Override
 	public boolean removeUser(Long userId) {
 		log.info("removeUser() invoked");
@@ -46,6 +48,7 @@ public class UserService implements IUserService{
 		}
 	}
 
+	//Update the User
 	@Override
 	public boolean updateUser(User user) {
 		log.info("updateUser() invoked");
@@ -60,6 +63,7 @@ public class UserService implements IUserService{
 		}
 	}
 
+	//Login method
 	@Override
 	public User login(String username, String password) {
 		log.info("login() invoked");
@@ -74,6 +78,7 @@ public class UserService implements IUserService{
 		}
 	}
 
+	//Logout Method
 	@Override
 	public String logout(User user) {
 		log.info("logout() invoked");

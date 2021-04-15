@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -23,19 +22,19 @@ public class User {
 	private Long userId;
 	
 	@NotNull
-	@Length(min = 5, max = 20)
-//	@Pattern(regexp = "^[A-Za-z]+[A-Za-z_0-9]*$", message = "Username should not contain any special characters")
+	@Length(min = 5, max = 20, message = "Username should be from 5 to 20 characters")
+	@Pattern(regexp = "^[A-Za-z]+[A-Za-z_0-9]*$", message = "Username should not contain any special characters")
 	@Column(name = "USER_NAME")
 	private String userName;
 	
 	@NotNull
-//	@Pattern(regexp = "[A-Za-z]+[0-9]+[!@#$%^&*]+", message = "Password should atleast contain a digit and a special character")
-	@Length(min = 5, max = 20)
+	@Pattern(regexp = "[A-Za-z]+[0-9]+[!@#$%^&*]+", message = "Password should atleast contain a digit and a special character")
+	@Length(min = 7, max = 20, message = "Password should be from 7 to 20 characters")
 	@Column(name = "PASSWORD")
 	private String password;
 	
 	@NotNull
-//	@Pattern(regexp = "(Admin|Investor|Manager)", message = "Role must be admin or investor or manager")
+	@Pattern(regexp = "(Admin|Investor|Manager)", message = "Role must be admin or investor or manager")
 	@Column(name = "ROLE")
 	private String role;// admin or investor or manager
 

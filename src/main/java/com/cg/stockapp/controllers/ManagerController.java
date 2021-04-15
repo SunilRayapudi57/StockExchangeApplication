@@ -2,6 +2,8 @@ package com.cg.stockapp.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public class ManagerController {
 	private ManagerService serv;
 
 	@PostMapping
-	public String addManager(@RequestBody Manager manager) {
+	public String addManager(@Valid @RequestBody Manager manager) {
 		serv.addManager(manager);
 		return "Manager added successfully";
 	}
@@ -35,7 +37,7 @@ public class ManagerController {
 	}
 	
 	@PutMapping("/company")
-	public Manager getManager(@RequestBody Company company) {
+	public Manager getManager(@Valid @RequestBody Company company) {
 		return serv.getManager(company);
 	}
 	
@@ -45,7 +47,7 @@ public class ManagerController {
 	}
 	
 	@PutMapping
-	public String updateManager(@RequestBody Manager manager) {
+	public String updateManager(@Valid @RequestBody Manager manager) {
 		serv.updateManager(manager);
 		return "Manager with id "+manager.getManagerId()+" updated successfully";
  	}

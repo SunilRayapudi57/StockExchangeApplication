@@ -2,6 +2,8 @@ package com.cg.stockapp.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,13 +40,13 @@ public class StockController {
 	}
 
 	@PostMapping
-	public String addStock(@RequestBody Stock stock) {
+	public String addStock(@Valid @RequestBody Stock stock) {
 		serv.addStock(stock);
 		return "Stock added successfully";
 	}
 
 	@PutMapping
-	public String updateStock(@RequestBody Stock stock) {
+	public String updateStock(@Valid @RequestBody Stock stock) {
 		serv.updateStockDetails(stock);
 		return "Stock details updated successfully";
 	}

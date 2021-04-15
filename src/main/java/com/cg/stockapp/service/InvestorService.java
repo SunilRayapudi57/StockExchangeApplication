@@ -3,9 +3,7 @@ package com.cg.stockapp.service;
 import java.util.List;
 
 import com.cg.stockapp.entities.BankAccount;
-import com.cg.stockapp.entities.Company;
 import com.cg.stockapp.entities.Investor;
-import com.cg.stockapp.entities.Stock;
 
 public interface InvestorService {
 	
@@ -25,10 +23,10 @@ public interface InvestorService {
 	
 	public List<Investor> viewAllInvestorByStock(String stockId);
 	
-//	public List<Investor> viewAllInvestorByCompany(String companyId);
+	public List<Investor> viewAllInvestorByCompany(String companyId);
 
 	public boolean buyStock(String investorId, String stockId, int quantity);
 
-	boolean sellStock(String investorId, String stockId, int quantity);
+	boolean sellAllStocks(String investorId, String stockId);
 	
 }

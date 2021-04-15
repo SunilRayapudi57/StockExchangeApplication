@@ -1,7 +1,8 @@
 package com.cg.stockapp.service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.stockapp.entities.BankAccount;
-import com.cg.stockapp.entities.Company;
 import com.cg.stockapp.entities.Investor;
 import com.cg.stockapp.entities.Stock;
+import com.cg.stockapp.entities.Transaction;
 import com.cg.stockapp.exceptions.BankAccountNotFoundException;
 import com.cg.stockapp.exceptions.CompanyNotFoundException;
 import com.cg.stockapp.exceptions.DuplicateInvesterException;
@@ -22,6 +23,7 @@ import com.cg.stockapp.exceptions.StockNotFoundException;
 import com.cg.stockapp.repository.CompanyRepository;
 import com.cg.stockapp.repository.InvestorRepository;
 import com.cg.stockapp.repository.StockRepository;
+import com.cg.stockapp.repository.TransactionRepository;
 
 @Service
 public class InvestorServiceImpl implements InvestorService {
@@ -34,9 +36,13 @@ public class InvestorServiceImpl implements InvestorService {
 	
 	@Autowired
 	CompanyRepository companyRepo;
+	
+	@Autowired
+	TransactionRepository transRepo;
 
 	Logger log = LoggerFactory.getLogger(InvestorServiceImpl.class);
 
+	//Display all the Investors
 	@Override
 	public List<Investor> getAllInvestor() {
 		log.info("getAllInvestor() has been invoked");
@@ -50,6 +56,7 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 	}
 
+	//Add the Investor
 	@Override
 	public boolean addInvestor(Investor investor) {
 		log.info("addInvestor() has been invoked");
@@ -64,6 +71,8 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 	}
 
+	
+	//Add Bank details for the Investor
 	@Override
 	public boolean addBankDetails(String investorId, BankAccount account) {
 		log.info("addBankDetails() has been invoked");
@@ -81,6 +90,7 @@ public class InvestorServiceImpl implements InvestorService {
 
 	}
 
+	//Display the Bank details for the Investor
 	@Override
 	public BankAccount getBankDetails(String investorId) {
 		log.info("getBankDetails() has been invoked");
@@ -97,6 +107,8 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 	}
 
+	
+	//Update the Investor
 	@Override
 	public boolean updateInvestor(Investor investor) {
 		log.info("updateInvestor() has been invoked");
@@ -112,6 +124,7 @@ public class InvestorServiceImpl implements InvestorService {
 
 	}
 
+	//Delete the Investor
 	@Override
 	public boolean deleteInvestor(String investorId) {
 		log.info("deleteInvestor() has been invoked");
@@ -125,6 +138,7 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 	}
 
+	//Display all the Investor details
 	@Override
 	public Investor getInvestorDetails(String investorId) {
 		log.info("getInvestorDetails() has been invoked");
@@ -136,6 +150,8 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 	}
 
+	
+	//Buy stock
 	@Override
 	public boolean buyStock(String investorId, String stockId, int quantity) {
 		log.info("buyStock() has been invoked");
@@ -156,9 +172,13 @@ public class InvestorServiceImpl implements InvestorService {
 			log.warn("InsufficientSharesException : stock with is " + stockId + " has insufficient shares");
 			throw new InsufficientSharesException("This stock has insufficient shares");
 		}
-		investor.addStock(stock, quantity);
+		
+		Transaction transaction = new Transaction(LocalDateTime.now(), "Buy", quantity, investor, stock);
+		investor.addTransaction(transaction);
 		investorRepo.save(investor);
-		stock.addInvestor(investor);
+		transRepo.save(transaction);
+		
+		stock.addTransaction(transaction);
 		stock.setQuantity(availableQuantity - quantity);
 		stockRepo.save(stock);
 		log.info("Investor " + investor.getInvestorName() + " has bought " + quantity + " shares of "
@@ -166,48 +186,45 @@ public class InvestorServiceImpl implements InvestorService {
 		return true;
 	}
 
+	//Sell all the Stocks
 	@Override
-	public boolean sellStock(String investorId, String stockId, int quantity) {
+	public boolean sellAllStocks(String investorId, String stockId) {
 		log.info("sellStock() has been invoked");
 		if (!investorRepo.existsById(investorId)) {
 			log.warn("InvestorNotFoundException : Purchase failed, Investor not with id " + investorId);
-			throw new InvestorNotFoundException("Purchase", "Investor not found with id " + investorId);
+			throw new InvestorNotFoundException("Purchase", "Investor does not found with id " + investorId);
 		}
 		Stock stock = stockRepo.findById(stockId).get();
 		Investor investor = investorRepo.findById(investorId).get();
-		if (!investor.getStocks().contains(stock)) {
+		List<Stock> investorStocks = investor.getTransactions()
+												 .stream()
+												 .map(t->t.getStock())
+												 .collect(Collectors.toList());
+		if(!investorStocks.contains(stock)) {
 			log.warn("StockNotFoundException : SellStock failed, Investor does not have a stock with id " + stockId);
-			throw new StockNotFoundException("SellStock", "Investor does not have a stock with id " + stockId);
+			throw new StockNotFoundException("SellStock", "The investor has no stocks with id "+stockId);
 		}
 
-		
-		int investorAvailableQuantity = investor.getStockQuantity().get(stock);
-
-		if (quantity > investorAvailableQuantity) {
-			log.warn("InsufficientSharesException : stock with is " + stockId + " has insufficient shares");
-			throw new InsufficientSharesException("This stock has insufficient shares");
-		}
-
-		investorAvailableQuantity -= quantity;
-		if (investorAvailableQuantity == 0) {
-			investor.removeStock(stock);
-		}
-		else {
-			investor.updateStock(stock, investorAvailableQuantity);
-		}
+		int quantity = investor.getTransactions().stream()
+							   .filter(transaction->transaction.getTransactionType().equals("Buy"))
+							   .mapToInt(transaction->transaction.getQuantity()).sum();
+	
+		Transaction transaction = new Transaction(LocalDateTime.now(), "Sell", quantity, investor, stock);
+		investor.addTransaction(transaction);
 		investorRepo.save(investor);
-
-		if (investorAvailableQuantity == 0)
-			stock.removeInvestor(investor);
-
-		int stockAvailableQuantity = stockRepo.findById(stockId).get().getQuantity();
-		stock.setQuantity(stockAvailableQuantity + quantity);
-		stockRepo.save(stock);
+		transRepo.save(transaction);
+		
+		stock.addTransaction(transaction);
+		stock.setQuantity(stock.getQuantity()+quantity);
+		stockRepo.save(stock); 
+		
 		log.info("Investor " + investor.getInvestorName() + " has sold " + quantity + " shares of "
 				+ stock.getCompany().getCompanyName());
 		return true;
 	}
 
+	
+	//Display all the Investors by Stock
 	@Override
 	public List<Investor> viewAllInvestorByStock(String stockId) {
 		log.info("viewAllInvestor() has been invoked");
@@ -215,7 +232,10 @@ public class InvestorServiceImpl implements InvestorService {
 			throw new StockNotFoundException("Request", "Stock not found with id "+stockId);
 		}
 		
-		List<Investor> investorList = stockRepo.findById(stockId).get().getInvestors();
+		List<Investor> investorList = transRepo.findAll().stream()
+											   .filter(transaction->transaction.getStock().getStockId() == stockId)
+											   .map(Transaction::getInvestor)
+											   .collect(Collectors.toList());
 		
 		if(investorList.isEmpty()) {
 			throw new InvestorNotFoundException("Request", "No investor found for the the stock with id "+stockId);
@@ -223,28 +243,26 @@ public class InvestorServiceImpl implements InvestorService {
 		
 		return investorList;
 	}
-//
-//	@Override
-//	public List<Investor> viewAllInvestorByCompany(String companyId) {
-//		log.info("viewAllInvestor() has been invoked");
-//		if(!companyRepo.existsById(companyId)) {
-//			throw new CompanyNotFoundException("Request", "Company not found with id "+companyId);
-//		}
-//		Company company = companyRepo.findById(companyId).get();
-//		if(!stockRepo.existsbyCompany(company)) {
-//			throw new StockNotFoundException("Request", "No stocks found for the company with id "+companyId);
-//		}
-//		List<Stock> stockList = stockRepo.findByCompany(company);
-//		List<Investor> investorList = new ArrayList<>();
-//		stockList.stream().filter(stock->!stock.getInvestors().isEmpty())
-//						  .peek(stock->investorList.addAll(stock.getInvestors()));
-//		if(investorList.isEmpty()) {
-//			throw new InvestorNotFoundException("Request", "No investor found for the company with id "+companyId);
-//		}
-//		return investorList;
-//						  
-//	}
-	
-	
 
+	
+	//Display all the Investors by Company
+	@Override
+	public List<Investor> viewAllInvestorByCompany(String companyId) {
+		log.info("viewAllInvestor() has been invoked");
+		if(!companyRepo.existsById(companyId)) {
+			throw new CompanyNotFoundException("Request", "Company not found with id "+companyId);
+		}
+		
+		List<Transaction> transactions = transRepo.findAll();
+		List<Investor> investorList = transactions.stream()
+									   .filter(transaction->transaction.getStock().getCompany().getCompanyId() == companyId)
+									   .map(Transaction::getInvestor)
+									   .collect(Collectors.toList());
+		
+		if(investorList.isEmpty()) {
+			throw new InvestorNotFoundException("Request", "No investor found for the company with id "+companyId);
+		}
+		return investorList; 
+	}
+	
 }

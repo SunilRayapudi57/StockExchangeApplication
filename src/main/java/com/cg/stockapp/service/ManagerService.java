@@ -27,6 +27,7 @@ public class ManagerService implements IManagerService {
 	
 	Logger log = LoggerFactory.getLogger(ManagerService.class);
 
+	//Display the Manager Details by Id
 	@Override
 	public Manager getManagerDetails(String managerId) {
 		log.info("getManagerDetails() has been invoked");
@@ -44,6 +45,7 @@ public class ManagerService implements IManagerService {
 		}
 	}
 
+	//Add the Manager
 	@Override
 	public boolean addManager(Manager manager) {
 		log.info("addManager() has been invoked");
@@ -63,6 +65,7 @@ public class ManagerService implements IManagerService {
 		}
 	}
 
+	//Delete the Manager
 	@Override
 	public boolean deleteManager(String managerId) {
 		log.info("deleteManager() has been invoked");
@@ -76,6 +79,7 @@ public class ManagerService implements IManagerService {
 		}
 	}
 
+	//Display all the Managers
 	@Override
 	public List<Manager> getAllManager() {
 		log.info("getAllManager() has been invoked");
@@ -90,6 +94,7 @@ public class ManagerService implements IManagerService {
 		}
 	}
 
+	//Update the Manager
 	@Override
 	public boolean updateManager(Manager manager) {
 		log.info("updateManager() has been invoked");
@@ -108,6 +113,7 @@ public class ManagerService implements IManagerService {
 		}
 	}
 
+	//Display the Manager by Company
 	@Override
 	public Manager getManager(Company company) {
 		log.info("getManager() has been invoked");

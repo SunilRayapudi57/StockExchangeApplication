@@ -2,6 +2,8 @@ package com.cg.stockapp.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ public class InvestorController {
 	@Autowired
 	InvestorService serv;
 
+	//get all the investors
 	@GetMapping
 	public List<Investor> getAllInvestor() {
 		return serv.getAllInvestor();
@@ -43,13 +46,13 @@ public class InvestorController {
 		return serv.viewAllInvestorByStock(stockId);
 	}
 
-//	@GetMapping("/company/{companyId}")
-//	public List<Investor> viewAllInvestorByCompany(@PathVariable("companyId") String companyId){
-//		return serv.viewAllInvestorByCompany(companyId);
-//	}
+	@GetMapping("/company/{companyId}")
+	public List<Investor> viewAllInvestorByCompany(@PathVariable("companyId") String companyId){
+		return serv.viewAllInvestorByCompany(companyId);
+	}
 	
 	@PostMapping
-	public String addInvestor(@RequestBody Investor investor) {
+	public String addInvestor(@Valid @RequestBody Investor investor) {
 		serv.addInvestor(investor);
 		return "Investor added successfully";
 	}
@@ -61,13 +64,13 @@ public class InvestorController {
 	}
 
 	@PutMapping("{investorId}")
-	public String addBankDetails(@PathVariable("investorId") String investorId, @RequestBody BankAccount account) {
+	public String addBankDetails(@PathVariable("investorId") String investorId, @Valid @RequestBody BankAccount account) {
 		serv.addBankDetails(investorId, account);
 		return "Bank details added successfully for the investor with id " + investorId;
 	}
 
 	@PutMapping
-	public String updateInvestor(@RequestBody Investor investor) {
+	public String updateInvestor(@Valid @RequestBody Investor investor) {
 		serv.updateInvestor(investor);
 		return "Investor details updated successfully";
 	}
@@ -79,17 +82,16 @@ public class InvestorController {
 			@PathVariable("quantity") int quantity
 		) {
 		serv.buyStock(investorId, stockId, quantity);
-		return "A stock with id "+stockId+" has been purchased by investor with id "+investorId;
+		return quantity+" shares of the stock with id "+stockId+" has been purchased by investor with id "+investorId;
 	}
 	
-	@PutMapping("sellStock/{investorId}/{stockId}/{quantity}")
+	@PutMapping("sellStock/{investorId}/{stockId}")
 	public String sellStock(
 			@PathVariable("investorId")String investorId,
-			@PathVariable("stockId") String stockId,
-			@PathVariable("quantity") int quantity
+			@PathVariable("stockId") String stockId
 		) {
-		serv.sellStock(investorId, stockId, quantity);
-		return "A stock with id "+stockId+" has been sold by investor with id "+investorId;
+		serv.sellAllStocks(investorId, stockId);
+		return "All shares with id "+stockId+" has been sold by investor with id "+investorId;
 	}
 	
 }
