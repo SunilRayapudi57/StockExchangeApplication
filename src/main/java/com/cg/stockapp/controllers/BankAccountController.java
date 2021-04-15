@@ -17,11 +17,9 @@ public class BankAccountController {
 	BankAccountService serv;
 	
 	@PostMapping
-	public String addBankAccount(@RequestBody BankAccount acc) {
-		if(serv.addBankAccount(acc))
-			return "Bank Account not added";
-		else
-			return "Bank Account added successfully";
+	public String addBankAccount(@RequestBody BankAccount account) {
+		serv.addBankAccount(account);
+		return "Bank account added successfully";
 	}
 	
 }

@@ -1,28 +1,46 @@
 package com.cg.stockapp.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="stock")
 public class Stock  {
 	
 	@Id
+	@Column(name = "STOCK_ID")
     private String stockId;
+	
+	@Column(name = "STOCK_NAME")
 	private String stockName;
+	
+	@Column(name = "QUANTITY")
 	private int quantity;
+	
+	@Column(name = "TYPE")
 	private String type;
+	
+	@Column(name = "AVG_PRICE")
 	private double avgPrice;
+	
+	@Column(name = "STOCK_TOTAL")
 	private int stockTotal;
+	
+	@Column(name = "PROFIT_LOSS")
 	private double profitLoss;
+	
+	@Column(name = "STATUS")
 	private String status; // active or non-Active
 	
-	@OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "compan_id")
+	
+	@ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id")
+	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 	private Company company;
 	
 	@JsonIgnore
@@ -32,12 +50,39 @@ public class Stock  {
 			joinColumns = @JoinColumn(name = "stock_Id"),
 			inverseJoinColumns = @JoinColumn(name = "investor_id")
 		)
-	private Set<Investor> investors = new HashSet<>();
+	private List<Investor> investors = new ArrayList<>();
 	
+	
+	public Stock(String stockId, String stockName, int quantity, String type, double avgPrice, int stockTotal,
+			double profitLoss, String status) {
+		super();
+		this.stockId = stockId;
+		this.stockName = stockName;
+		this.quantity = quantity;
+		this.type = type;
+		this.avgPrice = avgPrice;
+		this.stockTotal = stockTotal;
+		this.profitLoss = profitLoss;
+		this.status = status;
+	}
+
 	public Stock() {
 		super();
 	}
 	
+	public void addInvestor(Investor investor) {
+		this.investors.add(investor);
+	}
+	public void removeInvestor(Investor investor) {
+		this.investors.remove(investor);
+	}
+	
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	public String getStockId() {
 		return stockId;
 	}
@@ -86,11 +131,13 @@ public class Stock  {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Set<Investor> getInvestors() {
+
+	public List<Investor> getInvestors() {
 		return investors;
 	}
-	public void setInvestors(Set<Investor> investors) {
+	public void setInvestors(List<Investor> investors) {
 		this.investors = investors;
 	}
+	
 	
 }

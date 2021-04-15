@@ -7,5 +7,9 @@ import com.cg.stockapp.entities.Company;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, String>{
-
+	
+	public boolean existsByCompanyName(String companyName);
+	
+	public Company findByCompanyName(String companyName);
+	
 }

@@ -37,14 +37,9 @@ public class UserController {
 	}
 
 	@PostMapping
-	public String addUser(@Valid @RequestBody User user, BindingResult result) {
-		if (result.hasErrors())
-			return "Error occured"+result;
-		else {
-			serv.addUser(user);
-			return "User added successfully";
-		}
-
+	public String addUser(@Valid @RequestBody User user) {
+		serv.addUser(user);
+		return "User added successfully";
 	}
 
 	@DeleteMapping("/remove/{userId}")

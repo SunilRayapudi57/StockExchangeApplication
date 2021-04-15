@@ -6,8 +6,14 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 
 @Entity
+@Table(name = "manager")
 public class Manager {
 	
 	@Id
@@ -25,6 +31,7 @@ public class Manager {
 
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyId")
+	@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 	private Company company;
 	
 	public Manager(String managerId, String managerName, String email, String password, String mobileNum) {

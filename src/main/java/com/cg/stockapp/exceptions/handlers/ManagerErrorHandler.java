@@ -21,7 +21,7 @@ public class ManagerErrorHandler extends ResponseEntityExceptionHandler{
 		errorbody.put("timestamp", LocalDateTime.now());
 		errorbody.put("details", dme.getMessage());
 
-		return new ResponseEntity<>(errorbody, HttpStatus.CONFLICT);
+		return new ResponseEntity<>(errorbody, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(ManagerNotFoundException.class)
@@ -31,7 +31,7 @@ public class ManagerErrorHandler extends ResponseEntityExceptionHandler{
 		errorbody.put("timestamp", LocalDateTime.now());
 		errorbody.put("details", mne.getMessage());
 
-		return new ResponseEntity<>(errorbody, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorbody, HttpStatus.BAD_REQUEST);
 	}
 	
 }

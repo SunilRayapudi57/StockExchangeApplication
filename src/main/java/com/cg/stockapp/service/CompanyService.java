@@ -51,7 +51,7 @@ public class CompanyService implements ICompanyService {
 	public List<Company> getAllCompanyInfo() {
 		List<Company> companyList = repo.findAll();
 		if(companyList.isEmpty()) {
-			log.warn("");
+			log.warn("No data found in the database");
 			throw new EmptyTableException("No Data Found in the database");
 		}
 		else {

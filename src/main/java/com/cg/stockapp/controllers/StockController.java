@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.stockapp.entities.Stock;
-import com.cg.stockapp.exceptions.StockNotFoundException;
 import com.cg.stockapp.service.StockService;
 
 @RestController
@@ -25,9 +24,17 @@ public class StockController {
 
 	@GetMapping
 	public List<Stock> viewAllStock() {
-
 		return serv.viewAllStock();
+	}
 
+	@GetMapping("{stockId}")
+	public Stock viewStockDetails(@PathVariable("stockId") String stockId) {
+		return serv.viewStockDetails(stockId);
+	}
+
+	@GetMapping("/company/{companyName}")
+	public List<Stock> viewStockByCompany(@PathVariable("companyName") String companyName){
+		return serv.viewStockByCompany(companyName);
 	}
 
 	@PostMapping
@@ -38,19 +45,14 @@ public class StockController {
 
 	@PutMapping
 	public String updateStock(@RequestBody Stock stock) {
-		if (serv.updateStockDetails(stock)) {
-			return "Stock Data successfully updated";
-		} else
-			throw new StockNotFoundException("Update", "Stock not found with id " + stock.getStockId());
+		serv.updateStockDetails(stock);
+		return "Stock details updated successfully";
 	}
 
 	@DeleteMapping("{stockid}")
 	public String removeStock(@PathVariable("stockid") String id) {
-		if (serv.removeStockDetails(id)) {
-			return "Stock Data successfully deleted";
-		} else {
-			throw new StockNotFoundException("Delete", "Stock with id " + id + "to delete not found");
-		}
+		serv.removeStockDetails(id);
+		return "Stock Data successfully deleted";
 	}
 
 }

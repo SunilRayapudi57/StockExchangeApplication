@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Length;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -20,19 +22,19 @@ public class User {
 	@Column(name = "USER_ID", updatable = false, nullable = false )
 	private Long userId;
 	
-//	@NotNull
-//	@Size(min = 5, max = 20, message = "Name should be 5 to 20 characters")
+	@NotNull
+	@Length(min = 5, max = 20)
 //	@Pattern(regexp = "^[A-Za-z]+[A-Za-z_0-9]*$", message = "Username should not contain any special characters")
 	@Column(name = "USER_NAME")
 	private String userName;
 	
-//	@NotNull
+	@NotNull
 //	@Pattern(regexp = "[A-Za-z]+[0-9]+[!@#$%^&*]+", message = "Password should atleast contain a digit and a special character")
-//	@Size(min = 5, max = 20, message = "Password should be 5 to 20 characters")
+	@Length(min = 5, max = 20)
 	@Column(name = "PASSWORD")
 	private String password;
 	
-//	@NotNull
+	@NotNull
 //	@Pattern(regexp = "(Admin|Investor|Manager)", message = "Role must be admin or investor or manager")
 	@Column(name = "ROLE")
 	private String role;// admin or investor or manager

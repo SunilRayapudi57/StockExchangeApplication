@@ -1,9 +1,13 @@
 
 package com.cg.stockapp.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -23,6 +27,9 @@ public class Company {
     @Column(name = "CATEGORY")
 //    @Size(min = 3, max = 7, message = "Invalid category")
     private String category;
+    
+    @OneToMany
+    private List<Stock> stocks = new ArrayList<>();
     
 	public Company(String companyId, String companyName, String category) {
 		super();
